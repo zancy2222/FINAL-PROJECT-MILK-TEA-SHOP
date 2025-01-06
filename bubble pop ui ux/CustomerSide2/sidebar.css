@@ -1,0 +1,87 @@
+/* SIDEBAR */
+.sidebar {
+  width: 238px;
+  background-color: #f8f9fa;
+  padding: 20px;
+  position: relative;
+}
+
+.sidebar .logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.sidebar .nav-link {
+  display: flex;
+  align-items: center;
+  color: #737373;
+  padding: 10px 15px;
+  margin-bottom: 5px;
+  border-radius: 13px;
+  position: relative;
+  font-weight: 500;
+}
+
+.sidebar .nav-link.active {
+  background-color: #d2deef;
+  color: #205cad;
+}
+
+.sidebar .nav-link.active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -20px;
+  /* This pushes the blue border to the left of the container */
+  width: 5px;
+  height: 100%;
+  background-color: #205cad;
+}
+
+.sidebar .nav-item-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-left: 17px;
+}
+
+.sidebar .nav-link img {
+  width: 20px;
+}
+
+.sidebar .divider {
+  height: 1px;
+  background-color: rgba(234, 106, 18, 0.1);
+  margin: 20px 0;
+  width: calc(100% + 40px);
+  /* Makes the divider span the full width of the container */
+  position: relative;
+  left: -20px;
+  /* Aligns the divider with the left edge of the container */
+}
+
+.upgrade-box {
+  background-color: #15488c;
+  color: white;
+  text-align: center;
+  padding: 30px 20px;
+  border-radius: 13px;
+
+}
+
+.upgrade-box p {
+  font-size: 12px;
+  margin-top: 50px;
+  font-weight: 300;
+}
+
+.upgrade-box .btn {
+  background-color: white;
+  color: #205cad;
+  border-radius: 10px;
+  font-weight: 600;
+  width: 115px;
+  font-size: 12px;
+}

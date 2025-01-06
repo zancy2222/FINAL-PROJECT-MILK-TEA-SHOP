@@ -1,0 +1,16 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #205CAD;
+    --secondary-color: #ACC7F0;
+    --tertiary-color: #1D1D1B;
+    --quaternary-color: #5885C2;
+    --quinary-color: #D1D1D1;
+    --senary-color: #E7E7E7;
+    --septenary-color: #C4C4C4;
+    --octonary-color: #FFFFFF;
+}

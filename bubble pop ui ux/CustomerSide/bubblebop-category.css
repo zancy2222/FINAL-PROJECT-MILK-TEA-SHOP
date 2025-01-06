@@ -1,0 +1,72 @@
+/* BUBBLEBOP CATEGORY */
+.bubblebop-category {
+  margin-top: 50px;
+
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.category-header h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1D1D1B;
+}
+
+.view-more {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #205CAD;
+  text-decoration: none;
+}
+
+.view-more svg {
+  margin-left: 8px;
+}
+
+.categories {
+  display: flex;
+  gap: 90px;
+}
+
+.category-item {
+  width: 313.97px;
+  height: 313.97px;
+  background-color: #ACC7F0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  color: white;
+  padding: 10px;
+  /* Added padding for spacing */
+  box-sizing: border-box;
+}
+
+.category-item.milktea {
+  background-color: #205CAD;
+}
+
+.category-item .category-icon {
+  width: 150px;
+  height: 150px;
+  background-color: #D1D1D1;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.category-item .category-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #205CAD;
+}
+
+.category-item.milktea .category-text {
+  color: white;
+}

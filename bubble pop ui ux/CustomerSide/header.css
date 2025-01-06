@@ -1,0 +1,96 @@
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.header .header-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.header .header-content .greeting {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.header .header-content .subtext {
+  font-size: 16px;
+  color: #205CAD;
+}
+
+.header .search-bar {
+  flex-grow: 1;
+  max-width: 400px;
+  margin: 0 20px;
+}
+
+.header .search-bar input {
+  width: 100%;
+  background: none;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 18px;
+}
+
+.header .user-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header .user-info img {
+  width: 24px;
+}
+
+.header .user-info .user-name {
+  font-weight: 600;
+}
+
+.discount-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #205CAD;
+  color: white;
+  margin-top: 60px;
+  border-radius: 28px;
+  padding: 20px;
+  position: relative;
+}
+
+.discount-banner .text {
+  font-size: 64px;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+.discount-banner .coupon {
+  display: inline-block;
+  background-color: white;
+  color: #205CAD;
+  width: 268px;
+  height: 65px;
+  line-height: 65px;
+  /* Vertically centers the text */
+  text-align: center;
+  border-radius: 20px;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.discount-banner .mascot {
+  height: 400px;
+  position: absolute;
+  right: -20px;
+  bottom: 0;
+}

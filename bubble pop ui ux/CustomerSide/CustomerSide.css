@@ -1,0 +1,20 @@
+/* GENERAL */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+main {
+  display: flex;
+}
+
+/* MAIN CONTENT */
+.main-content {
+  flex: 1;
+  background-color: rgb(221, 221, 221);
+  padding: 20px;
+}
