@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'add') {
             $productName = $_POST['product_name'];
-            $category = $_POST['category'];
+            $categoryName = $_POST['category'];
             $sizes = $_POST['sizes'];
             $price = $_POST['price'];
             $imagePath = '';
@@ -21,13 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Insert into the database
             $stmt = $conn->prepare("INSERT INTO products (product_name, category, sizes, price, image_path) VALUES (?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssssd", $productName, $category, $sizes, $price, $imagePath);
+            $stmt->bind_param("ssssd", $productName, $categoryName, $sizes, $price, $imagePath);
             $stmt->execute();
             echo "Product added successfully";
         } elseif ($action === 'edit') {
             $id = $_POST['id'];
             $productName = $_POST['product_name'];
-            $category = $_POST['category'];
+            $categoryName = $_POST['category'];
             $sizes = $_POST['sizes'];
             $price = $_POST['price'];
             $imagePath = '';
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Update product
             $stmt = $conn->prepare("UPDATE products SET product_name = ?, category = ?, sizes = ?, price = ?, image_path = ? WHERE id = ?");
-            $stmt->bind_param("ssssdi", $productName, $category, $sizes, $price, $imagePath, $id);
+            $stmt->bind_param("ssssdi", $productName, $categoryName, $sizes, $price, $imagePath, $id);
             $stmt->execute();
             echo "Product updated successfully";
         } elseif ($action === 'delete') {

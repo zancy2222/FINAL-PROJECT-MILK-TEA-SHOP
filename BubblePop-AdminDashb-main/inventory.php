@@ -205,8 +205,8 @@ $result = $conn->query($sql);
         <hr>
         <nav class="nav flex-column">
             <a class="nav-link" href="#"><img src="material-symbols_dashboard-outline.svg" alt="Dashboard Icon">Dashboard</a>
-            <a class="nav-link active" href="#"><img src="Purchase Order.svg" alt="Order Icon">Order</a>
-            <a class="nav-link" href="#"><img src="Milkshake.svg" alt="Product Icon">Product</a>
+            <a class="nav-link" href="#"><img src="Purchase Order.svg" alt="Order Icon">Order</a>
+            <a class="nav-link active" href="#"><img src="Milkshake.svg" alt="Product Icon">Product</a>
             <a class="nav-link" href="#"><img src="Cardboard Box.svg" alt="Supplies Icon">Categories</a>
             <a class="nav-link" href="#"><img src="Test Results.svg" alt="Inventory Icon">Order Management</a>
             <a class="nav-link" href="#"><img src="Group 37009.svg" alt="Report Icon">Report</a>
@@ -294,8 +294,11 @@ $result = $conn->query($sql);
                                 </div>
                                 <div class="mb-3">
                                     <label for="category" class="form-label">Category</label>
-                                    <input type="text" class="form-control" name="category" id="category" placeholder="Enter category">
+                                    <select class="form-control" name="category" id="category">
+                                        <option value="" disabled selected>Select a category</option>
+                                    </select>
                                 </div>
+
                                 <div class="mb-3">
                                     <label for="sizes" class="form-label">Sizes</label>
                                     <input type="text" class="form-control" name="sizes" id="sizes" placeholder="Enter sizes">
@@ -333,8 +336,11 @@ $result = $conn->query($sql);
                                 </div>
                                 <div class="mb-3">
                                     <label for="editCategory" class="form-label">Category</label>
-                                    <input type="text" class="form-control" name="category" id="editCategory" placeholder="Enter category">
+                                    <select class="form-control" name="category" id="editCategory">
+                                        <option value="" disabled selected>Select a category</option>
+                                    </select>
                                 </div>
+
                                 <div class="mb-3">
                                     <label for="editSizes" class="form-label">Sizes</label>
                                     <input type="text" class="form-control" name="sizes" id="editSizes" placeholder="Enter sizes">
@@ -424,6 +430,39 @@ $result = $conn->query($sql);
                 $("#editSizes").val(sizes);
                 $("#editPrice").val(price);
             });
+        });
+        $(document).ready(function() {
+            function loadCategories() {
+                $.ajax({
+                    url: 'fetch_categories.php',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            const categories = response.categories;
+                            const categoryDropdown = $('#category');
+                            const editCategoryDropdown = $('#editCategory');
+
+                            categoryDropdown.empty().append('<option value="" disabled selected>Select a category</option>');
+                            editCategoryDropdown.empty().append('<option value="" disabled selected>Select a category</option>');
+
+                            categories.forEach(category => {
+                                const option = `<option value="${category.name}">${category.name}</option>`;
+                                categoryDropdown.append(option);
+                                editCategoryDropdown.append(option);
+                            });
+                        } else {
+                            alert(response.message || 'Failed to load categories.');
+                        }
+                    },
+                    error: function() {
+                        alert('An error occurred while fetching categories.');
+                    }
+                });
+            }
+
+            // Load categories on page load
+            loadCategories();
         });
     </script>
 

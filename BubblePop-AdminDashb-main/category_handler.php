@@ -1,15 +1,19 @@
 <?php
+header('Content-Type: application/json');
+
 $conn = new mysqli('localhost', 'root', '', 'bubblebop');
 
+// Check connection
 if ($conn->connect_error) {
-    die(json_encode(['success' => false, 'message' => 'Database connection failed.']));
+    echo json_encode(['success' => false, 'message' => 'Database connection failed.']);
+    exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'addCategory') {
-        $name = $_POST['name'];
+        $name = $_POST['name'] ?? '';
         $imagePath = null;
 
         if (!empty($_FILES['image']['name'])) {
@@ -28,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt->close();
     } elseif ($action === 'editCategory') {
-        $id = $_POST['id'];
-        $name = $_POST['name'];
+        $id = $_POST['id'] ?? '';
+        $name = $_POST['name'] ?? '';
         $imagePath = null;
 
         if (!empty($_FILES['image']['name'])) {
@@ -51,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt->close();
     } elseif ($action === 'deleteCategory') {
-        $id = $_POST['id'];
+        $id = $_POST['id'] ?? '';
 
         $stmt = $conn->prepare("DELETE FROM categories WHERE id = ?");
         $stmt->bind_param('i', $id);
@@ -67,4 +71,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $conn->close();
-?>

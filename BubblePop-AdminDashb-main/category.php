@@ -1,3 +1,21 @@
+<?php
+// Database connection
+$conn = new mysqli('localhost', 'root', '', 'bubblebop');
+
+// Check connection
+if ($conn->connect_error) {
+    die('Connection failed: ' . $conn->connect_error);
+}
+
+// Fetch categories
+$query = "SELECT * FROM categories";
+$categories = $conn->query($query);
+
+// Check for query errors
+if (!$categories) {
+    die('Query failed: ' . $conn->error);
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -207,198 +225,208 @@
         </nav>
     </div>
     <div class="content">
-    <div class="content-container">
-        <div class="top-nav mb-4">
-            <div class="dashboard-title">
-                <img src="material-symbols_dashboard-outline.svg" alt="Dashboard Icon">
-                Dashboard
+        <div class="content-container">
+            <div class="top-nav mb-4">
+                <div class="dashboard-title">
+                    <img src="material-symbols_dashboard-outline.svg" alt="Dashboard Icon">
+                    Dashboard
+                </div>
             </div>
-        </div>
 
-        <!-- Add Category Button -->
-        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-            Add Category
-        </button>
+            <!-- Add Category Button -->
+            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                Add Category
+            </button>
 
-        <!-- Categories Table -->
-        <div class="table-container">
-            <table class="table table-hover table-striped">
-                <thead>
-                    <tr class="table-header">
-                        <th>ID</th>
-                        <th>Category Name</th>
-                        <th>Image</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($categories->num_rows > 0): ?>
-                        <?php while ($category = $categories->fetch_assoc()): ?>
-                            <tr>
-                                <td><?= $category['id'] ?></td>
-                                <td><?= htmlspecialchars($category['name']) ?></td>
-                                <td>
-                                    <?php if (!empty($category['image_path'])): ?>
-                                        <img src="uploads/<?= htmlspecialchars($category['image_path']) ?>" alt="<?= htmlspecialchars($category['name']) ?>" class="table-image">
-                                    <?php else: ?>
-                                        N/A
-                                    <?php endif; ?>
-                                </td>
-                                <td class="action-buttons">
-                                    <button class="btn btn-sm btn-warning editCategory"
-                                        data-id="<?= $category['id'] ?>"
-                                        data-name="<?= htmlspecialchars($category['name']) ?>"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#editCategoryModal">Edit</button>
-                                    <button class="btn btn-sm btn-danger deleteCategory"
-                                        data-id="<?= $category['id'] ?>">Delete</button>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="4" class="text-center">No categories found.</td>
+            <!-- Categories Table -->
+            <div class="table-container">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr class="table-header">
+                            <th>ID</th>
+                            <th>Category Name</th>
+                            <th>Image</th>
+                            <th>Action</th>
                         </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        <?php if (isset($categories) && $categories->num_rows > 0): ?>
+                            <?php while ($category = $categories->fetch_assoc()): ?>
+                                <tr>
+                                    <td><?= $category['id'] ?></td>
+                                    <td><?= htmlspecialchars($category['name']) ?></td>
+                                    <td>
+                                        <?php if (!empty($category['image_path'])): ?>
+                                            <img src="uploads/<?= htmlspecialchars($category['image_path']) ?>" alt="<?= htmlspecialchars($category['name']) ?>" class="table-image">
+                                        <?php else: ?>
+                                            N/A
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="action-buttons">
+                                        <button class="btn btn-sm btn-warning editCategory"
+                                            data-id="<?= $category['id'] ?>"
+                                            data-name="<?= htmlspecialchars($category['name']) ?>"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editCategoryModal">Edit</button>
+                                        <button class="btn btn-sm btn-danger deleteCategory"
+                                            data-id="<?= $category['id'] ?>">Delete</button>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="4" class="text-center">No categories found.</td>
+                            </tr>
+                        <?php endif; ?>
 
-        <!-- Add Category Modal -->
-        <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="addCategoryForm" method="POST" enctype="multipart/form-data">
-                            <input type="hidden" name="action" value="addCategory">
-                            <div class="mb-3">
-                                <label for="categoryName" class="form-label">Category Name</label>
-                                <input type="text" class="form-control" name="name" id="categoryName" placeholder="Enter category name">
-                            </div>
-                            <div class="mb-3">
-                                <label for="categoryImage" class="form-label">Image</label>
-                                <input type="file" class="form-control" name="image" id="categoryImage">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Save Category</button>
-                        </form>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Add Category Modal -->
+            <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addCategoryForm" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="action" value="addCategory">
+                                <div class="mb-3">
+                                    <label for="categoryName" class="form-label">Category Name</label>
+                                    <input type="text" class="form-control" name="name" id="categoryName" placeholder="Enter category name">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="categoryImage" class="form-label">Image</label>
+                                    <input type="file" class="form-control" name="image" id="categoryImage">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save Category</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Edit Category Modal -->
-        <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="editCategoryForm" method="POST" enctype="multipart/form-data">
-                            <input type="hidden" name="action" value="editCategory">
-                            <input type="hidden" name="id" id="editCategoryId">
-                            <div class="mb-3">
-                                <label for="editCategoryName" class="form-label">Category Name</label>
-                                <input type="text" class="form-control" name="name" id="editCategoryName" placeholder="Enter category name">
-                            </div>
-                            <div class="mb-3">
-                                <label for="editCategoryImage" class="form-label">Image</label>
-                                <input type="file" class="form-control" name="image" id="editCategoryImage">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Update Category</button>
-                        </form>
+            <!-- Edit Category Modal -->
+            <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editCategoryForm" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="action" value="editCategory">
+                                <input type="hidden" name="id" id="editCategoryId">
+                                <div class="mb-3">
+                                    <label for="editCategoryName" class="form-label">Category Name</label>
+                                    <input type="text" class="form-control" name="name" id="editCategoryName" placeholder="Enter category name">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editCategoryImage" class="form-label">Image</label>
+                                    <input type="file" class="form-control" name="image" id="editCategoryImage">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update Category</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
+        </div>
     </div>
-</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    $(document).ready(function () {
-        // Add Category
-        $('#addCategoryForm').submit(function (e) {
-            e.preventDefault();
-            let formData = new FormData(this);
-
-            $.ajax({
-                url: 'category_handler.php',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    alert(response.message);
-                    if (response.success) {
-                        location.reload(); // Reload to show updated data
-                    }
-                },
-                error: function () {
-                    alert('An error occurred while adding the category.');
-                }
-            });
-        });
-
-        // Edit Category - Populate Form
-        $('.editCategory').click(function () {
-            $('#editCategoryId').val($(this).data('id'));
-            $('#editCategoryName').val($(this).data('name'));
-        });
-
-        // Update Category
-        $('#editCategoryForm').submit(function (e) {
-            e.preventDefault();
-            let formData = new FormData(this);
-
-            $.ajax({
-                url: 'category_handler.php',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    alert(response.message);
-                    if (response.success) {
-                        location.reload(); // Reload to show updated data
-                    }
-                },
-                error: function () {
-                    alert('An error occurred while updating the category.');
-                }
-            });
-        });
-
-        // Delete Category
-        $('.deleteCategory').click(function () {
-            if (confirm('Are you sure you want to delete this category?')) {
-                const categoryId = $(this).data('id');
+        $(document).ready(function() {
+            // Add Category
+            $('#addCategoryForm').submit(function(e) {
+                e.preventDefault();
+                let formData = new FormData(this);
 
                 $.ajax({
                     url: 'category_handler.php',
                     type: 'POST',
-                    data: { action: 'deleteCategory', id: categoryId },
-                    success: function (response) {
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    success: function(response) {
                         alert(response.message);
                         if (response.success) {
                             location.reload(); // Reload to show updated data
                         }
                     },
-                    error: function () {
-                        alert('An error occurred while deleting the category.');
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('An error occurred while adding the category.');
                     }
                 });
-            }
+            });
+
+            // Edit Category - Populate Form
+            $('.editCategory').click(function() {
+                $('#editCategoryId').val($(this).data('id'));
+                $('#editCategoryName').val($(this).data('name'));
+            });
+
+            // Update Category
+            $('#editCategoryForm').submit(function(e) {
+                e.preventDefault();
+                let formData = new FormData(this);
+
+                $.ajax({
+                    url: 'category_handler.php',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    success: function(response) {
+                        alert(response.message);
+                        if (response.success) {
+                            location.reload(); // Reload to show updated data
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('An error occurred while updating the category.');
+                    }
+                });
+            });
+
+            // Delete Category
+            $('.deleteCategory').click(function() {
+                if (confirm('Are you sure you want to delete this category?')) {
+                    const categoryId = $(this).data('id');
+
+                    $.ajax({
+                        url: 'category_handler.php',
+                        type: 'POST',
+                        data: {
+                            action: 'deleteCategory',
+                            id: categoryId
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            alert(response.message);
+                            if (response.success) {
+                                location.reload(); // Reload to show updated data
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                            alert('An error occurred while deleting the category.');
+                        }
+                    });
+                }
+            });
         });
-    });
-</script>
+    </script>
 
 </body>
 

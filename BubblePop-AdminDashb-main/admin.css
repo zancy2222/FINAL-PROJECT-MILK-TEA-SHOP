@@ -134,13 +134,12 @@ body {
   height: 24px;
 }
 
-/* ``````````````````````````````````````````BOXES */
 
 .boxes-container {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; /* Align with top-nav */
-  margin-top: 20px; /* Adjust margin as needed */
+  align-items: flex-start;
+  margin-top: 20px; 
   padding: 20px;
 }
 

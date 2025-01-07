@@ -1,3 +1,25 @@
+<?php
+session_start();
+include 'db_conn.php'; // Include database connection
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../index.php"); // Redirect to login page if not logged in
+    exit;
+}
+
+$user_id = $_GET['id'] ?? $_SESSION['user_id']; // Get user ID from query string or session
+
+// Fetch user details
+$stmt = $conn->prepare("SELECT name FROM users WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$stmt->bind_result($user_name);
+$stmt->fetch();
+$stmt->close();
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -73,27 +95,26 @@
     </div>
 
     <div class="main-content">
-      <div class="header">
+    <div class="header">
         <div class="header-content">
-          <div class="greeting">
-            <span>Hello Boss Don!</span>
-            <span class="emoji">👋</span>
-          </div>
-          <div class="subtext">What do you want to Drink?</div>
+            <div class="greeting">
+                <span>Hello <?php echo htmlspecialchars($user_name); ?>!</span>
+                <span class="emoji">👋</span>
+            </div>
+            <div class="subtext">What do you want to Drink?</div>
         </div>
         <div class="search-bar">
-          <input type="text" placeholder="Search...">
+            <input type="text" placeholder="Search...">
         </div>
         <div class="user-info">
-          <img src="Cart.svg" alt="Cart">
-          <img src="Notification.svg" alt="Notifications">
-          <img src="Ellipse 35.svg" alt="User" class="rounded-circle" style="width: 50px;">
-          <div class="user-name">Boss Don
-            <div style="font-size: 14px; color:#205cad;">User</div>
-          </div>
-          <img src="Combined-Shape.svg" alt="Dropdown">
+            <img src="Cart.svg" alt="Cart">
+            <img src="Notification.svg" alt="Notifications">
+            <img src="Ellipse 35.svg" alt="User" class="rounded-circle" style="width: 50px;">
+            <div class="user-name"><?php echo htmlspecialchars($user_name); ?>
+                <div style="font-size: 14px; color:#205cad;">User</div>
+            </div>
         </div>
-      </div>
+    </div>
 
       <div class="discount-banner">
         <div class="text">
