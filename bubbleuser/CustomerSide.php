@@ -77,12 +77,13 @@
              <img src="Edit-Square.svg" alt="Edit Square"> Food Order
            </div>
          </a>
+
          <a class="nav-link" href="#">
            <div class="nav-item-content">
-             <img src="Setting.svg" alt="Settings"> Settings
+             <img src="Heart.svg" alt="Settings"> Order Status
            </div>
          </a>
-         <a class="nav-link" href="#">
+         <a class="nav-link" href="../index.php">
            <div class="nav-item-content">
              <img src="Setting.svg" alt="Settings"> Log Out
            </div>
@@ -104,15 +105,12 @@
            </div>
            <div class="subtext">What do you want to Drink?</div>
          </div>
-         <div class="search-bar">
-           <input type="text" placeholder="Search...">
-         </div>
+
          <div class="user-info">
-           <img src="Cart.svg" alt="Cart">
-           <img src="Notification.svg" alt="Notifications">
-           <img src="Ellipse 35.svg" alt="User" class="rounded-circle" style="width: 50px;">
+
+                    <img src="user.png" alt="User" class="rounded-circle" style="width: 50px;">
            <div class="user-name"><?php echo htmlspecialchars($user_name); ?>
-             <div style="font-size: 14px; color:#205cad;">User</div>
+             <div style="font-size: 14px; color:#205cad;">Customer</div>
            </div>
          </div>
        </div>
@@ -138,11 +136,6 @@
          <div class="categories">
            <?php foreach ($categories as $category): ?>
              <div class="category-item <?= strtolower(str_replace(' ', '-', $category['name'])) ?>">
-               <div class="category-icon">
-                 <?php if (!empty($category['image_path'])): ?>
-                   <img src="<?= htmlspecialchars($category['image_path']) ?>" alt="<?= htmlspecialchars($category['name']) ?>">
-                 <?php endif; ?>
-               </div>
                <div class="category-text"><?= htmlspecialchars($category['name']) ?></div>
              </div>
            <?php endforeach; ?>
@@ -168,8 +161,8 @@
          <div class="col-md-2 footer-column">
            <div class="footer-header">Contact Us</div>
            <p><img src="phone.svg" alt="Phone" style="margin-left: -4.5px;">09XXXXXXXXXXX</p>
-           <p><img src="email.svg" alt="Email"> asdf@gmail.com</p>
-           <p><img src="location.svg" alt="Location"> Maysan, Valenzuela City</p>
+           <p><img src="email.svg" alt="Email"> Bubble_Pop@gmail.com</p>
+           <p><img src="location.svg" alt="Location"> CVSU Naic</p>
          </div>
          <div class="col-md-2 footer-column">
            <div class="footer-header">Categories</div>

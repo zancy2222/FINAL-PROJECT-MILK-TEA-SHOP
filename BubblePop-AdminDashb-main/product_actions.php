@@ -10,40 +10,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $categoryName = $_POST['category'];
             $sizes = $_POST['sizes'];
             $price = $_POST['price'];
-            $imagePath = '';
+            $imagePath = null;
 
-            // Handle image upload
             if (!empty($_FILES['image']['name'])) {
                 $targetDir = "uploads/";
-                $imagePath = $targetDir . basename($_FILES['image']['name']);
-                move_uploaded_file($_FILES['image']['tmp_name'], $imagePath);
+                $fileName = basename($_FILES['image']['name']);
+                $targetFilePath = $targetDir . $fileName;
+                if (!move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
+                    echo "Error uploading image.";
+                    exit;
+                }
+                $imagePath = $fileName;
             }
-
             // Insert into the database
             $stmt = $conn->prepare("INSERT INTO products (product_name, category, sizes, price, image_path) VALUES (?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssssd", $productName, $categoryName, $sizes, $price, $imagePath);
+            $stmt->bind_param("sssss", $productName, $categoryName, $sizes, $price, $imagePath);
             $stmt->execute();
-            echo "Product added successfully";
+
+            if ($stmt->affected_rows > 0) {
+                echo "Product added successfully";
+            } else {
+                echo "Error adding product.";
+            }
+
+            $stmt->close();
         } elseif ($action === 'edit') {
             $id = $_POST['id'];
             $productName = $_POST['product_name'];
             $categoryName = $_POST['category'];
             $sizes = $_POST['sizes'];
             $price = $_POST['price'];
-            $imagePath = '';
+            $imagePath = null;
 
             // Check if there's a new image uploaded
             if (!empty($_FILES['image']['name'])) {
                 $targetDir = "uploads/";
                 $imagePath = $targetDir . basename($_FILES['image']['name']);
-                move_uploaded_file($_FILES['image']['tmp_name'], $imagePath);
+                if (!move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
+                    echo "Error uploading image.";
+                    exit;
+                }
             }
 
             // Update product
-            $stmt = $conn->prepare("UPDATE products SET product_name = ?, category = ?, sizes = ?, price = ?, image_path = ? WHERE id = ?");
-            $stmt->bind_param("ssssdi", $productName, $categoryName, $sizes, $price, $imagePath, $id);
+            if ($imagePath) {
+                // Update with image
+                $stmt = $conn->prepare("UPDATE products SET product_name = ?, category = ?, sizes = ?, price = ?, image_path = ? WHERE id = ?");
+                $stmt->bind_param("sssssi", $productName, $categoryName, $sizes, $price, $imagePath, $id);
+            } else {
+                // Update without changing the image
+                $stmt = $conn->prepare("UPDATE products SET product_name = ?, category = ?, sizes = ?, price = ? WHERE id = ?");
+                $stmt->bind_param("ssssi", $productName, $categoryName, $sizes, $price, $id);
+            }
+
             $stmt->execute();
-            echo "Product updated successfully";
+
+            if ($stmt->affected_rows > 0) {
+                echo "Product updated successfully";
+            } else {
+                echo "Error updating product.";
+            }
+
+            $stmt->close();
         } elseif ($action === 'delete') {
             $id = $_POST['id'];
 
@@ -51,8 +79,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $conn->prepare("DELETE FROM products WHERE id = ?");
             $stmt->bind_param("i", $id);
             $stmt->execute();
-            echo "Product deleted successfully";
+
+            if ($stmt->affected_rows > 0) {
+                echo "Product deleted successfully";
+            } else {
+                echo "Error deleting product.";
+            }
+
+            $stmt->close();
         }
     }
 }
-?>
+
+$conn->close();

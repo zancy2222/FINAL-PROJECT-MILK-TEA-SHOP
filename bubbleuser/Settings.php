@@ -17,13 +17,18 @@ $stmt->bind_result($user_name);
 $stmt->fetch();
 $stmt->close();
 
-// Fetch products
-$stmt = $conn->prepare("SELECT id, product_name, category, sizes, price, image_path FROM products");
+// Fetch purchase data
+$stmt = $conn->prepare("SELECT p.product_name, p.sizes, p.image_path, pur.purchased_at, pur.status 
+                        FROM purchases pur
+                        JOIN products p ON pur.product_id = p.id
+                        WHERE pur.user_id = ?");
+$stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
-$products = [];
+$purchases = [];
+
 while ($row = $result->fetch_assoc()) {
-    $products[] = $row;
+    $purchases[] = $row;
 }
 
 $stmt->close();
@@ -41,8 +46,10 @@ $conn->close();
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <style>
+
+    </style>
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
         rel="stylesheet">
@@ -55,16 +62,25 @@ $conn->close();
     <link rel="stylesheet" href="CustomerSide/popular-milktea.css">
     <link rel="stylesheet" href="CustomerSide/sidebar.css">
     <style>
-        .custom-btn {
-            background-color: #205cad;
-            color: #fff;
-            border: none;
+        .table-header {
+            background: #205cad;
+            color: white;
+            font-weight: bold;
         }
 
-        .custom-btn:hover {
-            background-color: #184a8c;
-            /* Optional: Darker shade for hover */
-            color: #fff;
+        .table-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f0f8ff;
+        }
+
+        .purchase-status .card {
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -82,13 +98,13 @@ $conn->close();
                         <img src="Category.svg" alt="Category"> Dashboard
                     </div>
                 </a>
-                <a class="nav-link active" href="Order.php">
+                <a class="nav-link" href="Order.php">
                     <div class="nav-item-content">
                         <img src="Edit-Square.svg" alt="Edit Square"> Food Order
                     </div>
                 </a>
 
-                <a class="nav-link" href="Settings.php">
+                <a class="nav-link active" href="Settings.php">
                     <div class="nav-item-content">
                         <img src="Heart.svg" alt="Settings"> Order Status
                     </div>
@@ -118,8 +134,8 @@ $conn->close();
                 </div>
 
                 <div class="user-info">
-
-                    <img src="user.png" alt="User" class="rounded-circle" style="width: 50px;">
+                   
+                             <img src="user.png" alt="User" class="rounded-circle" style="width: 50px;">
                     <div class="user-name"><?php echo htmlspecialchars($user_name); ?>
                         <div style="font-size: 14px; color:#205cad;">Customer</div>
                     </div>
@@ -135,52 +151,71 @@ $conn->close();
                 </div>
                 <img src="white-Banner.svg" alt="Mascot" class="mascot">
             </div>
-            <!-- Products Section -->
-            <div class="products">
-                <h2>Products</h2>
-                <div class="row">
-                    <?php foreach ($products as $product): ?>
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100">
-                                <?php if (!empty($product['image_path'])): ?>
-                                    <img style="width: auto; height:200px;" src="../BubblePop-AdminDashb-main/uploads/<?= htmlspecialchars($product['image_path']) ?>" class="card-img-top" alt="<?= htmlspecialchars($product['product_name']) ?>">
+
+            <!-- Purchases Status Table -->
+            <div class="purchase-status mt-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Your Purchase Status</h5>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr class="table-header">
+                                    <th>Product Name</th>
+                                    <th>Size</th>
+                                    <th>Image</th>
+                                    <th>Purchased At</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if ($purchases && count($purchases) > 0): ?>
+                                    <?php foreach ($purchases as $purchase): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($purchase['product_name']) ?></td>
+                                            <td><?= htmlspecialchars($purchase['sizes']) ?></td>
+                                            <td>
+                                                <?php if (!empty($purchase['image_path'])): ?>
+                                                    <img src="<?= htmlspecialchars($purchase['image_path']) ?>" alt="<?= htmlspecialchars($purchase['product_name']) ?>" width="50" height="50" class="table-image">
+                                                <?php else: ?>
+                                                    No Image
+                                                <?php endif; ?>
+                                            </td>
+                                            <td><?= htmlspecialchars($purchase['purchased_at']) ?></td>
+                                            <td>
+                                                <span class="badge <?= getStatusClass($purchase['status']) ?>">
+                                                    <?= htmlspecialchars($purchase['status']) ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5" class="text-center">No purchases found</td>
+                                    </tr>
                                 <?php endif; ?>
-
-                                <div class="card-body">
-                                    <h5 class="card-title"><?= htmlspecialchars($product['product_name']) ?></h5>
-                                    <p class="card-text">Category: <?= htmlspecialchars($product['category']) ?></p>
-                                    <p class="card-text">Sizes: <?= htmlspecialchars($product['sizes']) ?></p>
-                                    <p class="card-text">Price: PHP <?= number_format($product['price'], 2) ?></p>
-                                </div>
-                                <div class="card-footer d-flex justify-content-between">
-                                    <button class="btn custom-btn buy-btn" data-product-id="<?= $product['id'] ?>">Buy</button>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-        </div>
-
-        <!-- Success Modal -->
-        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="successModalLabel">Success</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Product successfully bought!
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-
-
         </div>
+        <?php
+        function getStatusClass($status)
+        {
+            switch ($status) {
+                case 'Preparing':
+                    return 'bg-primary text-white';
+                case 'In transit':
+                    return 'bg-warning text-dark';
+                case 'Order Delivered':
+                    return 'bg-success text-white';
+                case 'Canceled':
+                    return 'bg-danger text-white';
+                default:
+                    return 'bg-secondary text-white';
+            }
+        }
+        ?>
     </main>
 
     <footer class="footer">
@@ -231,22 +266,6 @@ $conn->close();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $('.buy-btn').on('click', function() {
-                const productId = $(this).data('product-id');
-                $.post('buy_product.php', {
-                    product_id: productId
-                }, function(response) {
-                    if (response === 'success') {
-                        $('#successModal').modal('show');
-                    } else {
-                        alert('Error: Could not complete the purchase.');
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 
 </html>

@@ -216,12 +216,13 @@ if (!$categories) {
         </div>
         <hr>
         <nav class="nav flex-column">
-            <a class="nav-link" href="#"><img src="material-symbols_dashboard-outline.svg" alt="Dashboard Icon">Dashboard</a>
-            <a class="nav-link" href="#"><img src="Purchase Order.svg" alt="Order Icon">Order</a>
-            <a class="nav-link" href="#"><img src="Milkshake.svg" alt="Product Icon">Product</a>
-            <a class="nav-link active" href="#"><img src="Cardboard Box.svg" alt="Supplies Icon">Categories</a>
-            <a class="nav-link" href="#"><img src="Test Results.svg" alt="Inventory Icon">Order Management</a>
-            <a class="nav-link" href="#"><img src="Group 37009.svg" alt="Report Icon">Report</a>
+            <a class="nav-link" href="admin.php"><img src="material-symbols_dashboard-outline.svg" alt="Dashboard Icon">Dashboard</a>
+            <a class="nav-link" href="order.php"><img src="Purchase Order.svg" alt="Order Icon">Order</a>
+            <a class="nav-link" href="inventory.php"><img src="Milkshake.svg" alt="Product Icon">Product</a>
+            <a class="nav-link active" href="category.php"><img src="Cardboard Box.svg" alt="Supplies Icon">Categories</a>
+            <a class="nav-link" href="order_management.php"><img src="Test Results.svg" alt="Inventory Icon">Order Management</a>
+            <a class="nav-link" href="../index.php"><img src="arrow-red-down.svg" alt="Inventory Icon"> <span style="color:darkred; font-weight:bold;">Log Out</span></a>
+
         </nav>
     </div>
     <div class="content">
