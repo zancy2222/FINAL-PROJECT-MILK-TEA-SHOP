@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -127,36 +126,34 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-$(document).ready(function() {
-    $('#loginForm').submit(function(e) {
-        e.preventDefault();
+        $(document).ready(function() {
+            $('#loginForm').submit(function(e) {
+                e.preventDefault();
 
-        const formData = {
-            email: $('#email').val(),
-            password: $('#password').val(),
-            action: 'login'
-        };
+                const formData = {
+                    email: $('#email').val(),
+                    password: $('#password').val(),
+                    action: 'login'
+                };
 
-        $.ajax({
-            url: 'login_user.php',
-            type: 'POST',
-            data: formData,
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    // Redirect based on the response
-                    window.location.href = response.redirect;
-                } else {
-                    alert(response.message || 'Login failed. Please check your credentials.');
-                }
-            },
-            error: function() {
-                alert('An error occurred. Please try again.');
-            }
+                $.ajax({
+                    url: 'login_user.php',
+                    type: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                             window.location.href = response.redirect;
+                        } else {
+                            alert(response.message || 'Login failed. Please check your credentials.');
+                        }
+                    },
+                    error: function() {
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            });
         });
-    });
-});
-
     </script>
 
 </body>

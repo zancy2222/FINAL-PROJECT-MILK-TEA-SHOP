@@ -16,13 +16,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $targetDir = "uploads/";
                 $fileName = basename($_FILES['image']['name']);
                 $targetFilePath = $targetDir . $fileName;
+
                 if (!move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
                     echo "Error uploading image.";
                     exit;
                 }
-                $imagePath = $fileName;
+                $imagePath = $fileName; // Save only the file name
             }
-            // Insert into the database
+
             $stmt = $conn->prepare("INSERT INTO products (product_name, category, sizes, price, image_path) VALUES (?, ?, ?, ?, ?)");
             $stmt->bind_param("sssss", $productName, $categoryName, $sizes, $price, $imagePath);
             $stmt->execute();
@@ -42,14 +43,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $price = $_POST['price'];
             $imagePath = null;
 
-            // Check if there's a new image uploaded
             if (!empty($_FILES['image']['name'])) {
                 $targetDir = "uploads/";
-                $imagePath = $targetDir . basename($_FILES['image']['name']);
-                if (!move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
+                $fileName = basename($_FILES['image']['name']);
+                $targetFilePath = $targetDir . $fileName;
+
+                if (!move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
                     echo "Error uploading image.";
                     exit;
                 }
+                $imagePath = $fileName; // Save only the file name
             }
 
             // Update product
@@ -75,7 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($action === 'delete') {
             $id = $_POST['id'];
 
-            // Delete product
             $stmt = $conn->prepare("DELETE FROM products WHERE id = ?");
             $stmt->bind_param("i", $id);
             $stmt->execute();

@@ -344,7 +344,6 @@ if (!$categories) {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Add Category
             $('#addCategoryForm').submit(function(e) {
                 e.preventDefault();
                 let formData = new FormData(this);
@@ -359,7 +358,7 @@ if (!$categories) {
                     success: function(response) {
                         alert(response.message);
                         if (response.success) {
-                            location.reload(); // Reload to show updated data
+                            location.reload();
                         }
                     },
                     error: function(xhr, status, error) {
@@ -369,13 +368,11 @@ if (!$categories) {
                 });
             });
 
-            // Edit Category - Populate Form
             $('.editCategory').click(function() {
                 $('#editCategoryId').val($(this).data('id'));
                 $('#editCategoryName').val($(this).data('name'));
             });
 
-            // Update Category
             $('#editCategoryForm').submit(function(e) {
                 e.preventDefault();
                 let formData = new FormData(this);
@@ -390,7 +387,7 @@ if (!$categories) {
                     success: function(response) {
                         alert(response.message);
                         if (response.success) {
-                            location.reload(); // Reload to show updated data
+                            location.reload();
                         }
                     },
                     error: function(xhr, status, error) {
@@ -400,7 +397,6 @@ if (!$categories) {
                 });
             });
 
-            // Delete Category
             $('.deleteCategory').click(function() {
                 if (confirm('Are you sure you want to delete this category?')) {
                     const categoryId = $(this).data('id');
@@ -416,7 +412,7 @@ if (!$categories) {
                         success: function(response) {
                             alert(response.message);
                             if (response.success) {
-                                location.reload(); // Reload to show updated data
+                                location.reload();
                             }
                         },
                         error: function(xhr, status, error) {

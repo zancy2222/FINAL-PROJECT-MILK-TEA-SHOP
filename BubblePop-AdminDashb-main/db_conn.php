@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
 $username = "root";
-$password = ""; // Adjust according to your setup
+$password = "";  
 $dbname = "bubblebop";
 
 $conn = new mysqli($servername, $username, $password, $dbname);

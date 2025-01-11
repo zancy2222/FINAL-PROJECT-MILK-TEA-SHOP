@@ -136,7 +136,6 @@
             $('#registerForm').submit(function(e) {
                 e.preventDefault();
 
-                // Gather form data
                 const formData = {
                     name: $('#name').val(),
                     email: $('#email').val(),
@@ -145,7 +144,6 @@
                     action: 'register'
                 };
 
-                // Send data via AJAX
                 $.ajax({
                     url: 'register_user.php',
                     type: 'POST',
@@ -154,7 +152,7 @@
                     success: function(response) {
                         if (response.success) {
                             alert(response.message);
-                            $('#registerForm')[0].reset(); // Clear the form
+                            $('#registerForm')[0].reset();
                         } else {
                             alert(response.message || 'Registration failed.');
                         }

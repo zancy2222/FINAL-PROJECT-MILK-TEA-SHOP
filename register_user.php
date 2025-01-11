@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-include 'BubblePop-AdminDashb-main/db_conn.php'; // Include database connection
+include 'BubblePop-AdminDashb-main/db_conn.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'] ?? '';
@@ -13,10 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Hash the password
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-    // Check if the email already exists
     $checkQuery = $conn->prepare("SELECT id FROM users WHERE email = ?");
     $checkQuery->bind_param("s", $email);
     $checkQuery->execute();
@@ -29,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $checkQuery->close();
 
-    // Insert new user into the database
     $stmt = $conn->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
     $stmt->bind_param("sss", $name, $email, $hashedPassword);
 
@@ -42,4 +39,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->close();
     $conn->close();
 }
-?>

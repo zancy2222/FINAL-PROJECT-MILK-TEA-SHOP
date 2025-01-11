@@ -365,14 +365,11 @@ $result = $conn->query($sql);
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- jQuery CDN -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         $(document).ready(function() {
-            // Add Product
             $("#addProductForm").submit(function(e) {
                 e.preventDefault();
                 var formData = new FormData(this);
@@ -384,12 +381,11 @@ $result = $conn->query($sql);
                     contentType: false,
                     processData: false,
                     success: function(response) {
-                        location.reload(); // Refresh the page
+                        location.reload();
                     }
                 });
             });
 
-            // Edit Product
             $("#editProductForm").submit(function(e) {
                 e.preventDefault();
                 var formData = new FormData(this);
@@ -406,7 +402,6 @@ $result = $conn->query($sql);
                 });
             });
 
-            // Delete Product
             $(".deleteProduct").click(function() {
                 var productId = $(this).data("id");
 
@@ -418,7 +413,6 @@ $result = $conn->query($sql);
                 });
             });
 
-            // Populate Edit Modal
             $(".editProduct").click(function() {
                 var productId = $(this).data("id");
                 var productName = $(this).data("name");
@@ -463,7 +457,6 @@ $result = $conn->query($sql);
                 });
             }
 
-            // Load categories on page load
             loadCategories();
         });
     </script>

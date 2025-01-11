@@ -146,8 +146,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Fetch data from PHP
-        fetch('report.php') // Replace with the correct PHP file path
+        fetch('report.php')
             .then(response => response.json())
             .then(data => {
                 const ctx = document.getElementById('dashboardChart').getContext('2d');
@@ -159,14 +158,14 @@
                             label: 'Count',
                             data: [data.total_users, data.total_products, data.total_purchases],
                             backgroundColor: [
-                                '#205CAD', // Blue
-                                '#28A745', // Green
-                                '#FFC107' // Yellow
+                                '#205CAD',
+                                '#28A745',
+                                '#FFC107'
                             ],
                             hoverBackgroundColor: [
-                                '#1A4A8D', // Darker Blue
-                                '#206633', // Darker Green
-                                '#D1A006' // Darker Yellow
+                                '#1A4A8D',
+                                '#206633',
+                                '#D1A006'
                             ],
                             borderRadius: 10,
                             barThickness: 40
@@ -176,13 +175,13 @@
                         responsive: true,
                         plugins: {
                             legend: {
-                                display: false // Hide the legend for a cleaner look
+                                display: false
                             }
                         },
                         scales: {
                             x: {
                                 grid: {
-                                    display: false // Remove grid lines on X-axis
+                                    display: false
                                 },
                                 ticks: {
                                     font: {
